@@ -6,8 +6,9 @@
   right: 0;
   left: 0;
   height: $header-height;
-  padding: 8px 4px 0;
+  padding: 0 10px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
   .input {
@@ -29,6 +30,11 @@
     &:focus {
       border: 2px solid $focus-color;
     }
+  }
+
+  .btnsWrapp {
+    display: flex;
+    align-items: center;
   }
 
   .button {
