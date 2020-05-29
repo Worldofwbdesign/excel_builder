@@ -1,0 +1,35 @@
+@mixin button($color: green) {
+  height: 24px;
+  min-width: 24px;
+  pading: 3px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+
+  i {
+    font-size: 18px;
+  }
+
+  &:active,
+  &.active {
+    color: $color;
+  }
+
+  &:focus {
+    border: 2px solid $focus-color;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@mixin clearList() {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
