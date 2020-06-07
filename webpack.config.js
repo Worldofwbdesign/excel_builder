@@ -13,17 +13,7 @@ const jsLoaders = () => {
       loader: 'babel-loader',
       options: {
         presets: [
-          '@babel/preset-env',
-          {
-            plugins: [
-              [
-                "@babel/plugin-proposal-class-properties",
-                {
-                  "loose": true
-                }
-              ]
-            ]
-          }
+          'es2015',
         ],
       },
     }
@@ -84,7 +74,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.js$/,
+        test: /\.js$|jsx/,
         exclude: /node_modules/,
         use: jsLoaders()
       }
