@@ -5,14 +5,24 @@ const CODES = {
 
 const createCell = content => `<div class="cell" contenteditable>${content}</div>`
 
-const createColumn = content => `<div class="column">${content}</div>`
+const createColumn = content => `
+  <div class="column">
+    ${content}
+    <div class="col-resize"></div>
+  </div>`
 
-const createRow = (data, info = '') => `
-  <div class="row">
-    <div class="row-info">${info}</div>
-    <div class="row-data">${data}</div>
-  </div>
-`
+const createRow = (data, index = '') => {
+  const resize = index ? '<div class="row-resize"></div>' : ''
+  return `
+    <div class="row">
+      <div class="row-info">
+        ${index}
+        ${resize}
+      </div>
+      <div class="row-data">${data}</div>
+    </div>
+  `
+}
 
 const toChar = charCode => String.fromCharCode(charCode)
 
