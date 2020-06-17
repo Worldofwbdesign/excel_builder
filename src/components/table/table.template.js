@@ -3,16 +3,16 @@ const CODES = {
   Z: 90
 }
 
-const createCell = content => `<div class="cell" contenteditable>${content}</div>`
+const createCell = (content, index) => `<div class="cell" data-col=${toChar(CODES.A + index)} contenteditable>${content}</div>`
 
 const createColumn = content => `
-  <div class="column">
+  <div class="column" data-type="resizable">
     ${content}
-    <div class="col-resize"></div>
+    <div class="col-resize" data-resize="col"></div>
   </div>`
 
 const createRow = (data, index = '') => {
-  const resize = index ? '<div class="row-resize"></div>' : ''
+  const resize = index ? '<div class="row-resize" data-resize="row"></div>' : ''
   return `
     <div class="row">
       <div class="row-info">
