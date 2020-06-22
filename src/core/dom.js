@@ -31,8 +31,22 @@ class Dom {
     return this
   }
 
+  removeChild(child) {
+    return this.$el.removeChild(child)
+  }
+
   closest(selector) {
     return $(this.$el.closest(selector))
+  }
+
+  selectAll(selector) {
+    return this.$el.querySelectorAll(selector)
+  }
+
+  css(newStyles = {}) {
+    Object.entries(newStyles).forEach(([key, value]) => {
+      this.$el.style[key] = value
+    })
   }
 }
 
@@ -43,7 +57,11 @@ export default function $(selector) {
 $.create = (tag, classes = '') => {
   const el = document.createElement(tag)
   if (classes) {
-    el.classList.add(classes)
+    if (typeof classes === 'object') {
+      classes.forEach(c => el.classList.add(c))
+    } else {
+      el.classList.add(classes)
+    }
   }
 
   return $(el)
