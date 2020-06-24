@@ -43,6 +43,14 @@ class Dom {
     return this.$el.querySelectorAll(selector)
   }
 
+  getCoords() {
+    return this.$el.getBoundingClientRect()
+  }
+
+  innerText() {
+    return this.$el.innerText
+  }
+
   css(newStyles = {}) {
     Object.entries(newStyles).forEach(([key, value]) => {
       this.$el.style[key] = value

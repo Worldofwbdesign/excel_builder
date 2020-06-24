@@ -10,41 +10,42 @@ export class Table extends ExcelComponent {
     this.className = 'excel__table'
   }
 
-  addResizeMarker(isCol) {
+  addResizeMarker(isCol, styles = {}) {
     const $resizerMarker = $.create('div', ['resize-marker', isCol ? '-col' : '-row'])
+    $resizerMarker.css(styles)
     this.$root.append($resizerMarker)
     this.$resizeMarker = $resizerMarker
   }
 
   startResizeCol(event) {
     this.addResizeMarker(true)
-    this.resizeTarget = event.target.closest('[data-type="resizable"]')
     this.resizeTargetX = event.pageX
   }
 
   finishResizeCol() {
+    const coords = this.$resizeTarget.getCoords()
     const delta = this.resizeTargetX - this.mousePageX
-    const newWidth = this.resizeTarget.offsetWidth - delta + 'px'
+    const newWidth = coords.width - delta + 'px'
     
-    const cells = this.$root.selectAll(`[data-col="${this.resizeTarget.innerText}"]`)
-    const allCells = [this.resizeTarget, ...cells]
+    const cells = this.$root.selectAll(`[data-col="${this.$resizeTarget.innerText()}"]`)
+    const allCells = [this.$resizeTarget.$el, ...cells]
     allCells.forEach(node => node.style.width = newWidth)
     this.mousePageX = null
     this.resizeTargetX = null
   }
 
   startResizeRow(event) {
-    this.addResizeMarker()
-    this.resizeTarget = event.target.closest('[data-type="resizable"]')
-    this.resizeTargetY = event.pageY
+    this.addResizeMarker(false, { top: event.pageY - 98 + 'px' })
+    this.resizeTargetY = event.pageY - 98
   }
 
   finishResizeRow() {
+    const coords = this.$resizeTarget.getCoords()
     const delta = this.resizeTargetY - this.mousePageY
-    const newHeight = this.resizeTarget.offsetHeigth - delta + 'px'
-    this.resizeTarget.style.height = newHeight
-    this.mousePageX = null
-    this.resizeTargetX = null
+    const newHeight = coords.height - delta + 'px'
+    this.$resizeTarget.css({ height: newHeight })
+    this.mousePageY = null
+    this.resizeTargetY = null
   }
 
   onMousemove(e) {
@@ -52,22 +53,28 @@ export class Table extends ExcelComponent {
       this.mousePageX = e.pageX
       this.$resizeMarker.css({ left: e.pageX + 'px' })
     } else if (this.resizeType === 'row') {
-      this.mousePageY = e.pageY
-      this.$resizeMarker.css({ top: e.pageY + 'px' })
+      const yCoord = e.pageY - 98
+      this.mousePageY = yCoord
+      this.$resizeMarker.css({ top: yCoord + 'px' })
     }
   }
 
   onMousedown(e) {
-    e.preventDefault()
     const resizeTarget = e.target
     const resizeType = resizeTarget.dataset.resize
+    if (!resizeType) return
+
+    e.preventDefault()
+    const $resizeTarget = resizeTarget.closest('[data-type="resizable"]')
 
     this.resizeType = resizeType
+    this.$resizeTarget = $($resizeTarget)
     this.onMousemove = this.onMousemove.bind(this)
+
     if (resizeType === 'col') {
-      window.onmousemove = e => this.onMousemove(e, resizeType)
-    } else {
-      this.$root.onmousemove = e => this.onMousemove(e, resizeType)
+      window.onmousemove = e => this.onMousemove(e)
+    } else if (resizeType === 'row') {
+      this.$root.$el.onmousemove = e => this.onMousemove(e)
     }
     
 
@@ -79,7 +86,7 @@ export class Table extends ExcelComponent {
   }
 
   onMouseup() {
-    if (this.resizeTargetX) {
+    if (this.$resizeTarget) {
       this.resizeType === 'col' ? this.finishResizeCol() : this.finishResizeRow()
     }
 
@@ -87,6 +94,7 @@ export class Table extends ExcelComponent {
     window.onmousemove = null
     this.$root.removeChild(this.$resizeMarker.$el)
     this.$resizeMarker = null
+    this.$resizeTarget = null
     this.resizeType = null
   }
 
