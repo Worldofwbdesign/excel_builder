@@ -1,6 +1,7 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 import { createTable } from './table.template'
 import $ from '@core/dom'
+import { TableSelection } from './TableSelection'
 
 export class Table extends ExcelComponent {
   constructor($root) {
@@ -8,6 +9,17 @@ export class Table extends ExcelComponent {
       listeners: ['mousedown', 'mouseup']
     })
     this.className = 'excel__table'
+  }
+
+  prepare() {
+    this.selection = new TableSelection()
+  }
+
+  init() {
+    super.init()
+    
+    const $firstCell = this.$root.findOne('[data-id="1:0"]')
+    $firstCell && this.selection.select($firstCell)
   }
 
   addResizeMarker(isCol, styles = {}) {
@@ -27,7 +39,7 @@ export class Table extends ExcelComponent {
     const delta = this.resizeTargetX - this.mousePageX
     const newWidth = coords.width - delta + 'px'
     
-    const cells = this.$root.selectAll(`[data-col="${this.$resizeTarget.innerText()}"]`)
+    const cells = this.$root.findAll(`[data-col="${this.$resizeTarget.innerText()}"]`)
     const allCells = [this.$resizeTarget.$el, ...cells]
     allCells.forEach(node => node.style.width = newWidth)
     this.mousePageX = null

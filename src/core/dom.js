@@ -39,7 +39,11 @@ class Dom {
     return $(this.$el.closest(selector))
   }
 
-  selectAll(selector) {
+  findOne(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+
+  findAll(selector) {
     return this.$el.querySelectorAll(selector)
   }
 
@@ -55,6 +59,14 @@ class Dom {
     Object.entries(newStyles).forEach(([key, value]) => {
       this.$el.style[key] = value
     })
+  }
+
+  addClass(className) {
+    this.$el.classList.add(className)
+  }
+
+  removeClass(className) {
+    this.$el.classList.add(className)
   }
 }
 

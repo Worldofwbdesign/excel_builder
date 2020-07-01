@@ -3,7 +3,7 @@ const CODES = {
   Z: 90
 }
 
-const createCell = (content, index) => `<div class="cell" data-col=${toChar(CODES.A + index)} contenteditable>${content}</div>`
+const createCell = row => (__, col) => `<div class="cell" data-col=${toChar(CODES.A + col)} data-id="${row}:${col}" contenteditable></div>`
 
 const createColumn = content => `
   <div class="column" data-type="resizable">
@@ -41,7 +41,7 @@ export const createTable = (rowsCount = 15) => {
   for (let i = 1; i <= rowsCount; i++) {
     const cols = Array(colsCount)
       .fill('')
-      .map(createCell)
+      .map(createCell(i))
       .join('')
 
     rows.push(createRow(cols, i))
