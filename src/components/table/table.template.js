@@ -3,7 +3,16 @@ const CODES = {
   Z: 90
 }
 
-const createCell = row => (__, col) => `<div class="cell" data-col=${toChar(CODES.A + col)} data-id="${row}:${col}" contenteditable></div>`
+const createCell = row => (__, col) => `
+  <div
+    class="cell"
+    data-col=${toChar(CODES.A + col)}
+    data-id="${row}:${col}"
+    data-type="cell"
+    contenteditable
+  >
+  </div>
+`
 
 const createColumn = content => `
   <div class="column" data-type="resizable">

@@ -61,12 +61,20 @@ class Dom {
     })
   }
 
+  id(parse) {
+    if (parse) {
+      const [row, col] = this.id().split(':').map(n => Number(n))
+      return { row, col }
+    }
+    return this.$el.dataset.id
+  }
+
   addClass(className) {
     this.$el.classList.add(className)
   }
 
   removeClass(className) {
-    this.$el.classList.add(className)
+    this.$el.classList.remove(className)
   }
 }
 
