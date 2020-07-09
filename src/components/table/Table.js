@@ -8,7 +8,7 @@ import { TableResize } from './TableResize'
 export class Table extends ExcelComponent {
   constructor($root) {
     super($root, {
-      listeners: ['mousedown']
+      listeners: ['mousedown', 'keydown']
     })
     this.className = 'excel__table'
   }
@@ -43,7 +43,42 @@ export class Table extends ExcelComponent {
     }
   }
 
+  onKeydown(event) {
+    const keys = ['Enter', 'Tab', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']
+    const { key } = event
+    
+    if (keys.includes(key) && !event.shiftKey) {
+      event.preventDefault()
+      const id = this.selection.current.id(true)
+      const nextSelector = getNextSelector(key, id)
+      console.info('nextSelector', nextSelector)
+      const $next = this.$root.findOne(nextSelector)
+      this.selection.select($next)
+    }
+  }
+
   toHTML() {
     return createTable()
   }
+}
+
+function getNextSelector(key, { row, col }) {
+  switch (key) {
+    case 'Enter':
+    case 'ArrowDown':
+      row++
+      break
+    case 'ArrowRight':
+    case 'Tab':
+      col++
+      break
+    case 'ArrowUp':
+      row = row - 1 < 1 ? 1 : row - 1
+      break
+    case 'ArrowLeft':
+      col = col - 1 < 0 ? 0 : col - 1
+      break
+  }
+
+  return `[data-id="${row}:${col}"]`
 }

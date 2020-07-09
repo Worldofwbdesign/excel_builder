@@ -13,7 +13,7 @@ export class TableSelection {
     this.clear()
     this.current = $el
     this.group.push($el)
-    $el.addClass('selected')
+    $el.focus().addClass('selected')
   }
 
   selectGroup($group = []) {
