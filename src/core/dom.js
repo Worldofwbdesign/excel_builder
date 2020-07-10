@@ -12,6 +12,15 @@ class Dom {
     }
   }
 
+  text(text) {
+    if (typeof text === 'string') {
+      this.$el.innerText = text
+      return this
+    } else {
+      return this.$el.innerText
+    }
+  }
+
   clear() {
     this.html('')
     return this

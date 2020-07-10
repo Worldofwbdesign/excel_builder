@@ -1,10 +1,11 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Formula extends ExcelComponent {
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Formula',
-      listeners: ['input']
+      listeners: ['input'],
+      ...options,
     })
     this.className = 'excel__formula'
   }
@@ -17,6 +18,6 @@ export class Formula extends ExcelComponent {
   }
 
   onInput(e) {
-    console.info('Formula onInput', e.target.textContent.trim())
+    this.emitter.emit('formula:input', e.target.textContent.trim())
   }
 }

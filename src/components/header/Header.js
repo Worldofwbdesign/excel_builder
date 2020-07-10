@@ -1,8 +1,11 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Header extends ExcelComponent {
-  constructor(...props) {
-    super(...props)
+  constructor($root, options) {
+    super($root, {
+      name: 'Header',
+      ...options
+    })
     this.className = 'excel__header'
   }
 

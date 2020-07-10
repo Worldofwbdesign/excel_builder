@@ -1,8 +1,11 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Toolbar extends ExcelComponent {
-  constructor(...props) {
-    super(...props)
+  constructor($root, options) {
+    super($root, {
+      name: 'Toolbar',
+      ...options
+    })
     this.className = 'excel__toolbar'
   }
 
