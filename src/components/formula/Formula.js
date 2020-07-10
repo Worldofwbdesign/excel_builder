@@ -18,6 +18,6 @@ export class Formula extends ExcelComponent {
   }
 
   onInput(e) {
-    this.emitter.emit('formula:input', e.target.textContent.trim())
+    this.$emit('formula:input', e.target.textContent.trim())
   }
 }
