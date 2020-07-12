@@ -19,3 +19,24 @@ export const matrix = ($current, $target) => {
   
   return rows.reduce((acc, row) => acc.concat(cols.map(col => `${row}:${col}`)), [])
 }
+
+export function getNextSelector(key, { row, col }) {
+  switch (key) {
+    case 'Enter':
+    case 'ArrowDown':
+      row++
+      break
+    case 'ArrowRight':
+    case 'Tab':
+      col++
+      break
+    case 'ArrowUp':
+      row = row - 1 < 1 ? 1 : row - 1
+      break
+    case 'ArrowLeft':
+      col = col - 1 < 0 ? 0 : col - 1
+      break
+  }
+
+  return `[data-id="${row}:${col}"]`
+}

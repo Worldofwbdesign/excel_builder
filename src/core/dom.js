@@ -14,10 +14,13 @@ class Dom {
 
   text(text) {
     if (typeof text === 'string') {
-      this.$el.innerText = text
+      this.$el.textContent = text
       return this
+    }
+    if (this.$el.tagName.toLowerCase() === 'input') {
+      return this.$el.value
     } else {
-      return this.$el.innerText
+      return this.$el.textContent
     }
   }
 

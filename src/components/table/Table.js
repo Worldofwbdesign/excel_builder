@@ -1,7 +1,7 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 import { createTable } from './table.template'
 import $ from '@core/dom'
-import { getResizeType, isCell, matrix } from './table.utils'
+import { getResizeType, isCell, matrix, getNextSelector } from './table.utils'
 import { TableSelection } from './TableSelection'
 import { TableResize } from './TableResize'
 
@@ -9,7 +9,7 @@ export class Table extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Table',
-      listeners: ['mousedown', 'keydown'],
+      listeners: ['mousedown', 'keydown', 'input'],
       ...options
     })
     this.className = 'excel__table'
@@ -25,8 +25,10 @@ export class Table extends ExcelComponent {
     
     const $firstCell = this.$root.findOne('[data-id="1:0"]')
     $firstCell && this.selection.select($firstCell)
+    this.selectCell($firstCell)
 
     this.$on('formula:input', text => this.selection.current.text(text))
+    this.$on('formula:done', () => this.selection.current.focus())
   }
 
   onMousedown(event) {
@@ -41,8 +43,10 @@ export class Table extends ExcelComponent {
 
         const $cells = ids.map(id => $(`[data-id="${id}"]`))
         this.selection.selectGroup($cells)
+        this.$emit('table:select', $cells[0])
       } else {
-        this.selection.select($(event.target))
+        this.selection.select($target)
+        this.$emit('table:select', $target)
       }
     }
   }
@@ -55,34 +59,20 @@ export class Table extends ExcelComponent {
       event.preventDefault()
       const id = this.selection.current.id(true)
       const nextSelector = getNextSelector(key, id)
-      console.info('nextSelector', nextSelector)
-      const $next = this.$root.findOne(nextSelector)
-      this.selection.select($next)
+      this.selectCell(this.$root.findOne(nextSelector))
     }
+  }
+
+  onInput() {
+    this.$emit('table:input', this.selection.current)
+  }
+
+  selectCell($cell) {
+    this.selection.select($cell)
+    this.$emit('table:select', $cell)
   }
 
   toHTML() {
     return createTable()
   }
-}
-
-function getNextSelector(key, { row, col }) {
-  switch (key) {
-    case 'Enter':
-    case 'ArrowDown':
-      row++
-      break
-    case 'ArrowRight':
-    case 'Tab':
-      col++
-      break
-    case 'ArrowUp':
-      row = row - 1 < 1 ? 1 : row - 1
-      break
-    case 'ArrowLeft':
-      col = col - 1 < 0 ? 0 : col - 1
-      break
-  }
-
-  return `[data-id="${row}:${col}"]`
 }
