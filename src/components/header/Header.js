@@ -9,6 +9,10 @@ export class Header extends ExcelComponent {
     this.className = 'excel__header'
   }
 
+  init() {
+    super.init()
+  }
+
   toHTML() {
     return `
       <input type="text" class="input" value="New Table" />

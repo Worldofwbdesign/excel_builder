@@ -17,7 +17,7 @@ export class Table extends ExcelComponent {
 
   prepare() {
     this.selection = new TableSelection()
-    this.resize = new TableResize(this.$root)
+    this.resize = new TableResize(this.$root, { $dispatch: this.$dispatch.bind(this) })
   }
 
   init() {
@@ -31,10 +31,14 @@ export class Table extends ExcelComponent {
     this.$on('formula:done', () => this.selection.current.focus())
   }
 
+  resizeTable(event, resizeType) {
+    this.resize.onMousedown(event, resizeType)
+  }
+
   onMousedown(event) {
     const resizeType = getResizeType(event)
     if (resizeType) {
-      this.resize.onMousedown(event, resizeType)
+      this.resizeTable(event, resizeType)
     } else if (isCell) {
       const $target = $(event.target)
 
@@ -45,8 +49,7 @@ export class Table extends ExcelComponent {
         this.selection.selectGroup($cells)
         this.$emit('table:select', $cells[0])
       } else {
-        this.selection.select($target)
-        this.$emit('table:select', $target)
+        this.selectCell($target)
       }
     }
   }
@@ -70,9 +73,10 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+    this.$dispatch({ type: 'TEST' })
   }
 
-  toHTML() {
-    return createTable()
+  toHTML($root, state) {
+    return createTable($root, state)
   }
 }

@@ -1,8 +1,10 @@
 import $ from '@core/dom'
+import * as actions from '@/redux/actions'
 
 export class TableResize {
-  constructor($root) {
+  constructor($root, options) {
     this.$root = $root
+    this.$dispatch = options.$dispatch
   }
 
   addResizeMarker(isCol, styles = {}) {
@@ -20,11 +22,16 @@ export class TableResize {
   finishResizeCol() {
     const coords = this.$resizeTarget.getCoords()
     const delta = this.resizeTargetX - this.mousePageX
-    const newWidth = coords.width - delta + 'px'
+    const newWidth = coords.width - delta
     
-    const cells = this.$root.findAll(`[data-col="${this.$resizeTarget.innerText()}"]`)
+    const colId = this.$resizeTarget.innerText()
+    const cells = this.$root.findAll(`[data-col="${colId}"]`)
     const allCells = [this.$resizeTarget.$el, ...cells]
-    allCells.forEach(node => node.style.width = newWidth)
+    allCells.forEach(node => node.style.width = newWidth + 'px')
+    this.$dispatch(actions.tableResize({
+      id: colId,
+      value: newWidth
+    }))
     this.mousePageX = null
     this.resizeTargetX = null
   }
