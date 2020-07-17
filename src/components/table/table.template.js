@@ -4,10 +4,13 @@ const CODES = {
 }
 
 const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 32
 
 const toChar = charCode => String.fromCharCode(charCode)
 
 const getWidth = (state, key) => (state[key] || DEFAULT_WIDTH) + 'px'
+
+const getHeight = (state, key) => (state[key] || DEFAULT_HEIGHT) + 'px'
 
 const withWidthFrom = state => (content, index) => ({
   content,
@@ -15,17 +18,21 @@ const withWidthFrom = state => (content, index) => ({
   width: getWidth(state, content)
 })
 
-const createCell = (row, state) => (__, col) => `
-  <div
-    class="cell"
-    data-col=${toChar(CODES.A + col)}
-    data-id="${row}:${col}"
-    data-type="cell"
-    style="width: ${getWidth(state, toChar(CODES.A + col))};"
-    contenteditable
-  >
-  </div>
-`
+const createCell = (row, state) => (__, col) => {
+  const id = `${row}:${col}`
+  return `
+    <div
+      class="cell"
+      data-col=${toChar(CODES.A + col)}
+      data-id="${id}"
+      data-type="cell"
+      style="width: ${getWidth(state.colState, toChar(CODES.A + col))};"
+      contenteditable
+    >
+      ${state.dataState[id] || ''}
+    </div>
+  `
+}
 
 const createColumn = ({ content, width }) => `
   <div class="column" data-type="resizable" style="width: ${width};">
@@ -33,10 +40,10 @@ const createColumn = ({ content, width }) => `
     <div class="col-resize" data-resize="col"></div>
   </div>`
 
-const createRow = (data, index = '') => {
+const createRow = (data, index = '', state = {}) => {
   const resize = index ? '<div class="row-resize" data-resize="row"></div>' : ''
   return `
-    <div class="row" data-type="resizable">
+    <div class="row" data-type="resizable" data-row="${index}" style="height: ${getHeight(state, index)}">
       <div class="row-info">
         ${index}
         ${resize}
@@ -62,10 +69,10 @@ export const createTable = ($root, state, rowsCount = 15) => {
   for (let i = 1; i <= rowsCount; i++) {
     const cols = Array(colsCount)
       .fill('')
-      .map(createCell(i, state.colState))
+      .map(createCell(i, state))
       .join('')
 
-    rows.push(createRow(cols, i))
+    rows.push(createRow(cols, i, state.rowState))
   }
 
   return rows.join('')

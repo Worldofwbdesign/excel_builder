@@ -5,11 +5,12 @@ import { Formula } from '@/components/formula/Formula'
 import { Table } from '@/components/table/Table'
 
 import './scss/index.scss';
-import { createStore } from './core/createStore';
+import { createStore } from './core/createStore'
 import { rootReducer } from './redux/rootReducer'
+import { initialState } from './redux/initialState'
 import { storage } from '@core/utils'
 
-const store = createStore(rootReducer, storage('excelState'))
+const store = createStore(rootReducer, storage('excelState') || initialState)
 
 store.subscribe(state => state && storage('excelState', state))
 

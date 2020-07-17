@@ -9,6 +9,7 @@ export class Formula extends ExcelComponent {
       ...options,
     })
     this.className = 'excel__formula'
+    this.storageKeys = ['currentText']
   }
 
   init(){
@@ -16,8 +17,10 @@ export class Formula extends ExcelComponent {
     this.$input = this.$root.findOne('#formula-input')
 
     this.$on('table:select', $cell => this.$input.text($cell.text()))
-    this.$on('table:input', $cell => this.$input.text($cell.text()))
-    // this.$subscribe(state => console.info('Formula subscribe', state))
+  }
+
+  storageChanged(state) {
+    this.$input.text(state.currentText)
   }
 
   toHTML() {

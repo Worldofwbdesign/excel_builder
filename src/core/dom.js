@@ -24,6 +24,10 @@ class Dom {
     }
   }
 
+  get data() {
+    return this.$el.dataset
+  }
+
   clear() {
     this.html('')
     return this

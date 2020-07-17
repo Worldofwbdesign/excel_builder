@@ -4,6 +4,7 @@ import $ from '@core/dom'
 import { getResizeType, isCell, matrix, getNextSelector } from './table.utils'
 import { TableSelection } from './TableSelection'
 import { TableResize } from './TableResize'
+import * as actions from '@/redux/actions'
 
 export class Table extends ExcelComponent {
   constructor($root, options) {
@@ -27,7 +28,10 @@ export class Table extends ExcelComponent {
     $firstCell && this.selection.select($firstCell)
     this.selectCell($firstCell)
 
-    this.$on('formula:input', text => this.selection.current.text(text))
+    this.$on('formula:input', text => {
+      this.selection.current.text(text)
+      this.saveTextToStorage(text)
+    })
     this.$on('formula:done', () => this.selection.current.focus())
   }
 
@@ -66,14 +70,20 @@ export class Table extends ExcelComponent {
     }
   }
 
-  onInput() {
-    this.$emit('table:input', this.selection.current)
+  saveTextToStorage(value) {
+    this.$dispatch(actions.changeText({
+      value,
+      id: this.selection.current.id()
+    }))
+  }
+
+  onInput(event) {
+    this.saveTextToStorage($(event.target).text())
   }
 
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
-    this.$dispatch({ type: 'TEST' })
   }
 
   toHTML($root, state) {

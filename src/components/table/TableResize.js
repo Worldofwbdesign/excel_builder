@@ -30,7 +30,8 @@ export class TableResize {
     allCells.forEach(node => node.style.width = newWidth + 'px')
     this.$dispatch(actions.tableResize({
       id: colId,
-      value: newWidth
+      value: newWidth,
+      type: 'col'
     }))
     this.mousePageX = null
     this.resizeTargetX = null
@@ -44,8 +45,14 @@ export class TableResize {
   finishResizeRow() {
     const coords = this.$resizeTarget.getCoords()
     const delta = this.resizeTargetY - this.mousePageY
-    const newHeight = coords.height - delta + 'px'
-    this.$resizeTarget.css({ height: newHeight })
+    const newHeight = coords.height - delta
+    this.$resizeTarget.css({ height: newHeight + 'px' })
+    const rowId = this.$resizeTarget.data.row
+    this.$dispatch(actions.tableResize({
+      id: rowId,
+      value: newHeight,
+      type: 'row'
+    }))
     this.mousePageY = null
     this.resizeTargetY = null
   }
