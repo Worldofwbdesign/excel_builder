@@ -1,10 +1,12 @@
 const toButton = button => {
-  const meta = `data-type="button"`
+  const meta = `
+    data-type="button"
+    data-value='${JSON.stringify(button.value)}'
+  `
   return `
     <div
       class="button ${button.active ? 'active' : ''}"
       ${meta}
-      data-value='${JSON.stringify(button.value)}'
     >
       <i
         class="material-icons"
@@ -16,7 +18,7 @@ const toButton = button => {
   `
 }
 
-export function createToolbar() {
+export function createToolbar(state) {
   const buttons = [
     {
       icon: 'format_align_left',
@@ -32,7 +34,8 @@ export function createToolbar() {
     },
     {
       icon: 'format_bold',
-      value: { fontWeight: 'bold' }
+      value: { fontWeight: state.fontWeight === 'bold' ? 'normal' : 'bold' },
+      active: state.fontWeight === 'bold'
     },
     {
       icon: 'format_italic',
