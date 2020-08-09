@@ -1,22 +1,26 @@
 import $ from '@core/dom'
 import { ExcelComponent } from '@core/ExcelComponent'
+import { debounce } from '@core/utils';
 
 export class Formula extends ExcelComponent {
   constructor($root, options) {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'keydown'],
+      storageKeys: ['currentText'],
       ...options,
     })
-    this.className = 'excel__formula'
-    this.storageKeys = ['currentText']
   }
 
   init(){
     super.init()
     this.$input = this.$root.findOne('#formula-input')
 
-    this.$on('table:select', $cell => this.$input.text($cell.text()))
+    this.$on('table:select', $cell => this.$input.text($cell.data.formula))
+  }
+
+  prepare() {
+    this.onInput = debounce(this.onInput.bind(this), 1000)
   }
 
   storageChanged(state) {

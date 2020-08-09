@@ -21,4 +21,12 @@ export class TableSelection {
     this.group = $group
     $group.forEach($el => $el.addClass('selected'))
   }
+
+  get selectedIds() {
+    return this.group.map($el => $el.id())
+  }
+
+  applyStyle(style) {
+    this.group.forEach($cell => $cell.css(style))
+  }
 }

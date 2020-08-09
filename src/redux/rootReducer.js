@@ -1,4 +1,5 @@
-import { TABLE_RESIZE, CHANGE_TEXT } from './types'
+import { TABLE_RESIZE, CHANGE_TEXT, CHANGE_STYLES, APPLY_STYLES, CHANGE_TITLE } from './types'
+import { mergeDeep } from '@core/utils'
 
 export function rootReducer (state, action) {
   switch (action.type) {
@@ -11,6 +12,13 @@ export function rootReducer (state, action) {
       const { data: { value, id } } = action
       return { ...state, currentText: value, dataState: { ...state.dataState, [id]: value } }
     }
+    case CHANGE_STYLES:
+      return { ...state, currentStyles: action.data }
+    case APPLY_STYLES:
+      const newTableStyles = action.data.ids.reduce((acc, id) => Object.assign(acc, { [id]: action.data.value }), {})
+      return { ...state, tableStyles: mergeDeep(state.tableStyles, newTableStyles) }
+    case CHANGE_TITLE:
+      return { ...state, title: action.data }
     default:
       return state
   }

@@ -22,15 +22,18 @@ export function createToolbar(state) {
   const buttons = [
     {
       icon: 'format_align_left',
-      value: { textAlign: 'left' }
+      value: { textAlign: 'left' },
+      active: state.textAlign === 'left',
     },
     {
       icon: 'format_align_center',
-      value: { textAlign: 'center' }
+      value: { textAlign: 'center' },
+      active: state.textAlign === 'center',
     },
     {
       icon: 'format_align_right',
-      value: { textAlign: 'right' }
+      value: { textAlign: 'right' },
+      active: state.textAlign === 'right',
     },
     {
       icon: 'format_bold',
@@ -39,11 +42,13 @@ export function createToolbar(state) {
     },
     {
       icon: 'format_italic',
-      value: { fontStyle: 'italic' }
+      value: { fontStyle: state.fontStyle === 'italic' ? 'none' : 'italic' },
+      active: state.fontStyle === 'italic',
     },
     {
       icon: 'format_underlined',
-      value: { textDecoration: 'underline' }
+      value: { textDecoration: state.textDecoration === 'underline' ? 'none' : 'underline' },
+      active: state.textDecoration === 'underline',
     },
   ]
 

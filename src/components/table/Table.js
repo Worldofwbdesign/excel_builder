@@ -1,10 +1,12 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 import { createTable } from './table.template'
 import $ from '@core/dom'
+import { parseFormula } from '@core/utils';
 import { getResizeType, isCell, matrix, getNextSelector } from './table.utils'
 import { TableSelection } from './TableSelection'
 import { TableResize } from './TableResize'
 import * as actions from '@/redux/actions'
+import { defaultStyles } from '@/constants'
 
 export class Table extends ExcelComponent {
   constructor($root, options) {
@@ -29,10 +31,18 @@ export class Table extends ExcelComponent {
     this.selectCell($firstCell)
 
     this.$on('formula:input', text => {
-      this.selection.current.text(text)
+      this.selection.current
+        .attr('formula', text)
+        .text(parseFormula(text))
       this.saveTextToStorage(text)
     })
+
     this.$on('formula:done', () => this.selection.current.focus())
+
+    this.$on('toolbar:changeStyle', value => {
+      this.selection.applyStyle(value)
+      this.$dispatch(actions.applyStyles({ ids: this.selection.selectedIds, value }))
+    })
   }
 
   resizeTable(event, resizeType) {
@@ -84,6 +94,9 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+
+    const styles = $cell.getStyles(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
   }
 
   toHTML($root, state) {

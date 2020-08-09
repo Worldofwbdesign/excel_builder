@@ -1,3 +1,6 @@
+import { camelToDashCase, parseFormula } from '@core/utils'
+import { defaultStyles } from '../../constants'
+
 const CODES = {
   A: 65,
   Z: 90
@@ -20,25 +23,33 @@ const withWidthFrom = state => (content, index) => ({
 
 const createCell = (row, state) => (__, col) => {
   const id = `${row}:${col}`
+  const style = Object.entries({...defaultStyles, ...(state.tableStyles[id] || {})})
+    .map(([key, value]) => `${camelToDashCase(key)}: ${value}`)
+    .join(';')
+
   return `
     <div
       class="cell"
       data-col=${toChar(CODES.A + col)}
       data-id="${id}"
       data-type="cell"
-      style="width: ${getWidth(state.colState, toChar(CODES.A + col))};"
+      data-formula=${state.dataState[id] || ''}
+      style="${style}; width: ${getWidth(state.colState, toChar(CODES.A + col))};"
       contenteditable
     >
-      ${state.dataState[id] || ''}
+      ${parseFormula(state.dataState[id]) || ''}
     </div>
   `
 }
 
-const createColumn = ({ content, width }) => `
-  <div class="column" data-type="resizable" style="width: ${width};">
-    ${content}
-    <div class="col-resize" data-resize="col"></div>
-  </div>`
+const createColumn = ({ content, width }) => {
+  return `
+    <div class="column" data-type="resizable" style="width: ${width};">
+      ${content}
+      <div class="col-resize" data-resize="col"></div>
+    </div>
+  `
+}
 
 const createRow = (data, index = '', state = {}) => {
   const resize = index ? '<div class="row-resize" data-resize="row"></div>' : ''

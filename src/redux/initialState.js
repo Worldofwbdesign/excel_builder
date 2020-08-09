@@ -1,6 +1,11 @@
+import { defaultStyles } from '../constants'
+
 export const initialState = {
+  title: 'New Table',
   colState: {},
   rowState: {},
   dataState: {},
-  currentText: ''
+  currentText: '',
+  tableStyles: {},
+  currentStyles: defaultStyles,
 }
