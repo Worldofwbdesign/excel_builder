@@ -16,7 +16,11 @@ export class Formula extends ExcelComponent {
     super.init()
     this.$input = this.$root.findOne('#formula-input')
 
-    this.$on('table:select', $cell => this.$input.text($cell.data.formula))
+    
+
+    this.$on('table:select', $cell => {
+      this.$input.text($cell.data.formula)
+    })
   }
 
   prepare() {

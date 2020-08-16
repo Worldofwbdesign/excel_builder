@@ -20,9 +20,15 @@ export default class Router {
     this.changePageHandler()
   }
 
-  changePageHandler(event) {
-    console.info('path', this.activeRoute.path)
-    console.info('param', this.activeRoute.param)
+  changePageHandler() {
+    this.page && this.page.destroy()
+    this.$placeholder.clear('')
+
+    const PageClass = this.activeRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
+    this.page = new PageClass(this.activeRoute.param)
+    this.$placeholder.append(this.page.getRoot())
+
+    this.page.afterRender()
   }
 
   destroy() {

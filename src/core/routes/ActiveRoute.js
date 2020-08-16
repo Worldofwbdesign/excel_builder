@@ -4,6 +4,6 @@ export default class ActiveRoute {
   }
 
   get param() {
-    return this.path.split('/')[0]
+    return this.path.split('/')[1]
   }
 }
