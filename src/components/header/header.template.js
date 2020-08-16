@@ -1,6 +1,6 @@
 export const createHeader = ($root, state) => 
 `
-  <input value=${state.title} type="text" class="input" value="New Table" />
+  <input id="headerInput" value="${state.title}" type="text" class="input" value="New Table" />
   <div class="btnsWrapp">
     <div class="button">
       <i class="material-icons">

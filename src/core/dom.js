@@ -110,6 +110,15 @@ class Dom {
 
     return this.$el.getAttribute(name)
   }
+
+  value(newValue) {
+    if (newValue) {
+      this.$el.value = newValue
+      return this
+    }
+
+    return this.$el.value
+  }
 }
 
 export default function $(selector) {

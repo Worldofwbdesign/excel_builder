@@ -1,6 +1,7 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 import { createHeader } from './header.template'
 import * as actions from '@/redux/actions'
+import $ from '@core/dom'
 
 export class Header extends ExcelComponent {
   constructor($root, options) {
@@ -21,6 +22,7 @@ export class Header extends ExcelComponent {
   }
 
   toHTML($root, state) {
+    console.info('state', state)
     return createHeader($root, state)
   }
 }

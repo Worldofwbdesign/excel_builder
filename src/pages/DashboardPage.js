@@ -1,5 +1,6 @@
 import Page from "@core/Page";
 import $ from '@core/dom'
+import { createTable } from './dashboard.functions'
 
 export default class DashboardPage extends Page {
   constructor(...args) {
@@ -7,6 +8,7 @@ export default class DashboardPage extends Page {
   }
 
   getRoot() {
+    const tableId = Date.now().toString()
     return $.create('div', 'container').html(
       `
         <div class="dashboard__header">
@@ -15,30 +17,13 @@ export default class DashboardPage extends Page {
 
         <div class="dashboard__new">
           <div class="dashboard__view">
-            <a href="#" class="dashboard__create">
+            <a href="#excel/${tableId}" class="dashboard__create">
               Create <br />
               Table
             </a>
           </div>
         </div>
-
-        <div class="dashboard__table dashboard__view">
-          <div class="dashboard__list-header">
-            <span>table name</span>
-            <span>Last modified</span>
-          </div>
-
-          <ul class="dashboard__list">
-            <li class="dashboard__record">
-              <a href="#">Table #1</a>
-              <strong>12.06.2020</strong>
-            </li>
-            <li class="dashboard__record">
-              <a href="#">Table #2</a>
-              <strong>12.06.2020</strong>
-            </li>
-          </ul>
-        </div>
+        ${createTable()}
       `
     )
   }

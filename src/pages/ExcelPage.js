@@ -17,10 +17,11 @@ export default class ExcelPage extends Page {
   }
 
   getRoot() {
-    const store = createStore(rootReducer, storage(storageName(this.params)) || initialState)
+    const params = this.params || Date.now().toString()
+    const store = createStore(rootReducer, storage(storageName(params)) || initialState)
 
     const stateListener = debounce(state => {
-      state && storage(storageName(this.params), state)
+      state && storage(storageName(params), state)
     }, 300)
 
     store.subscribe(stateListener)
@@ -38,6 +39,6 @@ export default class ExcelPage extends Page {
   }
 
   destroy() {
-    this.excel.init()
+    this.excel.destroy()
   }
 }
