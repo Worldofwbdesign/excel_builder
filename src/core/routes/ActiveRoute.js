@@ -6,4 +6,8 @@ export default class ActiveRoute {
   get param() {
     return this.path.split('/')[1]
   }
+
+  navigate(path) {
+    window.location.hash = path
+  }
 }

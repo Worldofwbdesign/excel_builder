@@ -1,9 +1,14 @@
-const toHTML = key => `
-  <li class="dashboard__record">
-    <a href="#excel/${key.split(':')[1]}">Table #1</a>
-    <strong>12.06.2020</strong>
-  </li>
-`
+import {storage} from '@core/utils'
+
+const toHTML = key => {
+  const store = storage(key)
+  return `
+    <li class="dashboard__record">
+      <a href="#excel/${key.split(':')[1]}">${store.title}</a>
+      <strong>12.06.2020</strong>
+    </li>
+  `
+}
 
 const getAllKeys = () => {
   const keys = []
@@ -30,7 +35,7 @@ export const createTable = () => {
       </div>
 
       <ul class="dashboard__list">
-        ${keys.map(toHTML)}
+        ${keys.map(toHTML).join('')}
       </ul>
     </div>
   `
