@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack')
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -12,8 +13,10 @@ const jsLoaders = () => {
     {
       loader: 'babel-loader',
       options: {
-        presets: ['@babel/preset-env']
-      }
+        presets: [
+          'es2015',
+        ],
+      },
     }
   ];
 
@@ -48,6 +51,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: getFileName('css')
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ],
   devtool: isProd ? false : 'source-map',
@@ -72,7 +78,7 @@ module.exports = {
         ]
       },
       {
-        test: /\.m?js$/,
+        test: /\.js$|jsx/,
         exclude: /node_modules/,
         use: jsLoaders()
       }
