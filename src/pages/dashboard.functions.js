@@ -5,7 +5,10 @@ const toHTML = key => {
   return `
     <li class="dashboard__record">
       <a href="#excel/${key.split(':')[1]}">${store.title}</a>
-      <strong>12.06.2020</strong>
+      <strong>
+        ${new Date(store.openedDate).toLocaleDateString()}
+          ${new Date(store.openedDate).toLocaleTimeString()}
+      </strong>
     </li>
   `
 }

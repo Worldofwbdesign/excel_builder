@@ -8,4 +8,5 @@ export const initialState = {
   currentText: '',
   tableStyles: {},
   currentStyles: defaultStyles,
+  openedDate: new Date().toJSON()
 }

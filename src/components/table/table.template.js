@@ -26,6 +26,8 @@ const createCell = (row, state) => (__, col) => {
   const style = Object.entries({...defaultStyles, ...(state.tableStyles[id] || {})})
     .map(([key, value]) => `${camelToDashCase(key)}: ${value}`)
     .join(';')
+  const width = getWidth(state.colState, toChar(CODES.A + col))
+  console.info('width', width)
 
   return `
     <div
@@ -33,8 +35,8 @@ const createCell = (row, state) => (__, col) => {
       data-col=${toChar(CODES.A + col)}
       data-id="${id}"
       data-type="cell"
-      data-formula=${state.dataState[id] || ''}
-      style="${style}; width: ${getWidth(state.colState, toChar(CODES.A + col))};"
+      data-formula="${state.dataState[id] || ''}"
+      style="${style}; width: ${width}; };"
       contenteditable
     >
       ${parseFormula(state.dataState[id]) || ''}

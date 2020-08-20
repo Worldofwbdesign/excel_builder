@@ -70,3 +70,5 @@ export const parseFormula = (value = '') => {
 
   return value
 }
+
+export const preventDefault = event => event.preventDefault()
